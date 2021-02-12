@@ -16,26 +16,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build rails-app image
-        run: |
-          cd rails-app
-          docker build -t rails-app .
       - name: Build content-api image
         run: |
           cd content-api
           docker build -t content-api .
-      - name: Build worker image
-        run: |
-          cd worker
-          docker build -t worker .
-      - name: Push rails-app to ECR
-        uses: jwalton/gh-ecr-push@v1
-        with:
-          access-key-id: ${{ secrets.ECR_AWS_ACCESS_KEY_ID }}
-          secret-access-key: ${{ secrets.ECR_AWS_SECRET_ACCESS_KEY }}
-          region: eu-west-2
-          local-image: rails-app
-          image: ${ECR_NAME}:rails-app-${{ github.sha }}
       - name: Push content-api to ECR
         uses: jwalton/gh-ecr-push@v1
         with:
@@ -44,6 +28,10 @@ jobs:
           region: eu-west-2
           local-image: content-api
           image: ${ECR_NAME}:content-api-${{ github.sha }}
+      - name: Build worker image
+        run: |
+          cd worker
+          docker build -t worker .
       - name: Push worker to ECR
         uses: jwalton/gh-ecr-push@v1
         with:
@@ -52,3 +40,15 @@ jobs:
           region: eu-west-2
           local-image: worker
           image: ${ECR_NAME}:worker-${{ github.sha }}
+      - name: Build rails-app image
+        run: |
+          cd rails-app
+          docker build -t rails-app .
+      - name: Push rails-app to ECR
+        uses: jwalton/gh-ecr-push@v1
+        with:
+          access-key-id: ${{ secrets.ECR_AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.ECR_AWS_SECRET_ACCESS_KEY }}
+          region: eu-west-2
+          local-image: rails-app
+          image: ${ECR_NAME}:rails-app-${{ github.sha }}
