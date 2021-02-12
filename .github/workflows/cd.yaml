@@ -1,0 +1,25 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build rails-app image
+        run: |
+          cd rails-app
+          docker build -t rails-app .
+      - name: Build content-api image
+        run: |
+          cd content-api
+          docker build -t content-api .
+      - name: Build worker image
+        run: |
+          cd worker
+          docker build -t worker .
