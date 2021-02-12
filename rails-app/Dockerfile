@@ -15,6 +15,7 @@ RUN gem install bundler:2.2.4
 # RUN bundle install
 
 COPY . .
+RUN mkdir -p /app/tmp/storage
 
 RUN pwd
 RUN ls -l
