@@ -16,6 +16,9 @@ RUN bundle install
 
 COPY . .
 
+RUN pwd
+RUN ls -l
+
 RUN chown -R appuser:appgroup /app/tmp
 RUN chown -R appuser:appgroup /app/log
 RUN chown -R appuser:appgroup /app/db
