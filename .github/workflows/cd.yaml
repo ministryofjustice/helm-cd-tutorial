@@ -24,7 +24,6 @@ jobs:
           cd worker
           docker build -t worker .
       - name: Push rails-app to ECR
-        id: ecr
         uses: jwalton/gh-ecr-push@v1
         with:
           access-key-id: ${{ secrets.ECR_AWS_ACCESS_KEY_ID }}
@@ -33,7 +32,6 @@ jobs:
           local-image: rails-app
           image: ${ECR_NAME}:rails-app-${{ github.sha }}
       - name: Push content-api to ECR
-        id: ecr
         uses: jwalton/gh-ecr-push@v1
         with:
           access-key-id: ${{ secrets.ECR_AWS_ACCESS_KEY_ID }}
@@ -42,7 +40,6 @@ jobs:
           local-image: content-api
           image: ${ECR_NAME}:content-api-${{ github.sha }}
       - name: Push worker to ECR
-        id: ecr
         uses: jwalton/gh-ecr-push@v1
         with:
           access-key-id: ${{ secrets.ECR_AWS_ACCESS_KEY_ID }}
