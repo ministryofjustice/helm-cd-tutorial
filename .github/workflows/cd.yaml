@@ -14,7 +14,7 @@ jobs:
       - name: Build rails-app image
         run: |
           echo ----------
-          cat .dockerignore
+          env
           echo ----------
           cd rails-app
           docker build -t rails-app .
