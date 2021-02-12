@@ -5,6 +5,11 @@ on:
     branches:
       - 'main'
 
+env:
+  ECR_NAME: ${{ secrets.ECR_NAME }}
+  KUBE_CLUSTER: ${{ secrets.KUBE_CLUSTER }}
+  KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+
 jobs:
   main:
     runs-on: ubuntu-latest
