@@ -12,7 +12,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build rails-app image
-        run: cd rails-app; docker build -t rails-app .
+        run: |
+          echo ----------
+          cat .dockerignore
+          echo ----------
+          cd rails-app
+          docker build -t rails-app .
       - name: Build content-api image
         run: |
           cd content-api

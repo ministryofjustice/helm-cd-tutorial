@@ -12,7 +12,7 @@ WORKDIR /app
 
 COPY Gemfile* ./
 RUN gem install bundler:2.2.4
-RUN bundle install
+# RUN bundle install
 
 COPY . .
 
