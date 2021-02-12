@@ -2,23 +2,23 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-databaseUrlSecretName: <DATABASE-URL-SECRET-NAME>
+databaseUrlSecretName: rds-instance-output
 contentapiurl: "http://content-api-service:4567/image_url.json"
-                
+
 ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "true"
   hosts:
-    - host: <DNS-PREFIX>.apps.live-1.cloud-platform.service.justice.gov.uk
+    - host: helm-cd.apps.live-1.cloud-platform.service.justice.gov.uk
       paths: []
   # Update tls for custom domain and update secretName where certificate is stored
   # tls:
   #   - secretName: <CERTIFICATE-SECRET-NAME>
   #     hosts:
   #       - <DNS-PREFIX>.apps.live-1.cloud-platform.service.justice.gov.uk
-    
+
 postgresql:
   enabled: true
   existingSecret: container-postgres-secrets
