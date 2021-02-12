@@ -12,13 +12,13 @@ WORKDIR /app
 
 COPY Gemfile* ./
 RUN gem install bundler:2.2.4
-# RUN bundle install
+RUN bundle install
 
 COPY . .
-RUN mkdir -p /app/tmp/storage
 
-RUN pwd
-RUN ls -l
+# I have no idea why, but docker running in github actions skips the `tmp`
+# directory when it runs the `COPY . .` line above
+RUN mkdir -p /app/tmp/storage
 
 RUN chown -R appuser:appgroup /app/tmp
 RUN chown -R appuser:appgroup /app/log

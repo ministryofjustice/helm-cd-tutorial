@@ -13,9 +13,6 @@ jobs:
         uses: actions/checkout@v2
       - name: Build rails-app image
         run: |
-          echo ----------
-          env
-          echo ----------
           cd rails-app
           docker build -t rails-app .
       - name: Build content-api image
