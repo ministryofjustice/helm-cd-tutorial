@@ -14,7 +14,7 @@ COPY Gemfile* ./
 RUN gem install bundler:2.2.4
 RUN bundle install
 
-COPY . .
+COPY . /app
 
 RUN chown -R appuser:appgroup /app/tmp
 RUN chown -R appuser:appgroup /app/log
