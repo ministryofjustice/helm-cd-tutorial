@@ -29,7 +29,7 @@ postgresql:
 contentapi:
   replicaCount: 1
   image:
-    repository: ${ECR_NAME}
+    repository: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/${ECR_NAME}
     tag: content-api-${GITHUB_SHA}
     pullPolicy: IfNotPresent
   containerPort: 4567
@@ -44,7 +44,7 @@ contentapi:
 railsapp:
   replicaCount: 1
   image:
-    repository: ${ECR_NAME}
+    repository: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/${ECR_NAME}
     tag: rails-app-${GITHUB_SHA}
     pullPolicy: IfNotPresent
   containerPort: 3000
@@ -62,7 +62,7 @@ railsapp:
 worker:
   replicaCount: 1
   image:
-    repository: ${ECR_NAME}
+    repository: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/${ECR_NAME}
     tag: worker-${GITHUB_SHA}
     pullPolicy: IfNotPresent
   containerPort: 4567
