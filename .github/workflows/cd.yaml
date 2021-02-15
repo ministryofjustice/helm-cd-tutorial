@@ -58,3 +58,19 @@ jobs:
           cat helm_deploy/multi-container-app/values.tpl \
             | envsubst > helm_deploy/multi-container-app/values.yaml
           cat helm_deploy/multi-container-app/values.yaml
+      - name: Authenticate to the cluster
+        env:
+          KUBE_CERT: ${{ secrets.KUBE_CERT }}
+          KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
+        run: |
+          echo "${KUBE_CERT}" > ca.crt  # <-- the quotes here are important
+          kubectl config set-cluster ${KUBE_CLUSTER} --certificate-authority=./ca.crt --server=https://api.${KUBE_CLUSTER}
+          kubectl config set-credentials deploy-user --token=${KUBE_TOKEN}
+          kubectl config set-context ${KUBE_CLUSTER} --cluster=${KUBE_CLUSTER} --user=deploy-user --namespace=${KUBE_NAMESPACE}
+          kubectl config use-context ${KUBE_CLUSTER}
+      - name: Upgrade the Helm chart
+        run: |
+          cd helm_deploy/multi-container-app/
+          helm upgrade myapplication . \
+            --values values.yaml \
+            --namespace ${KUBE_NAMESPACE}
