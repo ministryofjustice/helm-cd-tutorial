@@ -29,8 +29,8 @@ postgresql:
 contentapi:
   replicaCount: 1
   image:
-    repository: ministryofjustice/cloud-platform-multi-container-demo-app
-    tag: content-api-1.6
+    repository: ${ECR_NAME}
+    tag: content-api-${GITHUB_SHA}
     pullPolicy: IfNotPresent
   containerPort: 4567
   imagePullSecrets: []
@@ -44,8 +44,8 @@ contentapi:
 railsapp:
   replicaCount: 1
   image:
-    repository: ministryofjustice/cloud-platform-multi-container-demo-app
-    tag: rails-app-1.6
+    repository: ${ECR_NAME}
+    tag: rails-app-${GITHUB_SHA}
     pullPolicy: IfNotPresent
   containerPort: 3000
   imagePullSecrets: []
@@ -62,8 +62,8 @@ railsapp:
 worker:
   replicaCount: 1
   image:
-    repository: ministryofjustice/cloud-platform-multi-container-demo-app
-    tag: worker-1.6
+    repository: ${ECR_NAME}
+    tag: worker-${GITHUB_SHA}
     pullPolicy: IfNotPresent
   containerPort: 4567
   imagePullSecrets: []
