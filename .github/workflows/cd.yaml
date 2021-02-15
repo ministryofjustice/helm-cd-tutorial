@@ -52,3 +52,9 @@ jobs:
           region: eu-west-2
           local-image: rails-app
           image: ${ECR_NAME}:rails-app-${{ github.sha }}
+      - name: Update `values.yaml`
+        run: |
+          export GITHUB_SHA=${{ github.sha }}
+          cat helm_deploy/multi-container-app/values.tpl \
+            | envsubst > helm_deploy/multi-container-app/values.yaml
+          cat helm_deploy/multi-container-app/values.yaml
