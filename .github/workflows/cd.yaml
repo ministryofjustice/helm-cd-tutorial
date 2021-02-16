@@ -5,11 +5,6 @@ on:
     branches:
       - 'main'
 
-env:
-  ECR_NAME: ${{ secrets.ECR_NAME }}
-  KUBE_CLUSTER: ${{ secrets.KUBE_CLUSTER }}
-  KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
-
 jobs:
   main:
     runs-on: ubuntu-latest
@@ -27,7 +22,7 @@ jobs:
           secret-access-key: ${{ secrets.ECR_AWS_SECRET_ACCESS_KEY }}
           region: eu-west-2
           local-image: content-api
-          image: ${ECR_NAME}:content-api-${{ github.sha }}
+          image: ${{ secrets.ECR_NAME }}:content-api-${{ github.sha }}
       - name: Build worker image
         run: |
           cd worker
@@ -39,7 +34,7 @@ jobs:
           secret-access-key: ${{ secrets.ECR_AWS_SECRET_ACCESS_KEY }}
           region: eu-west-2
           local-image: worker
-          image: ${ECR_NAME}:worker-${{ github.sha }}
+          image: ${{ secrets.ECR_NAME }}:worker-${{ github.sha }}
       - name: Build rails-app image
         run: |
           cd rails-app
@@ -51,26 +46,25 @@ jobs:
           secret-access-key: ${{ secrets.ECR_AWS_SECRET_ACCESS_KEY }}
           region: eu-west-2
           local-image: rails-app
-          image: ${ECR_NAME}:rails-app-${{ github.sha }}
+          image: ${{ secrets.ECR_NAME }}:rails-app-${{ github.sha }}
       - name: Update `values.yaml`
         run: |
           export GITHUB_SHA=${{ github.sha }}
+          export ECR_URL=${{ secrets.ECR_URL }}
           cat helm_deploy/multi-container-app/values.tpl \
             | envsubst > helm_deploy/multi-container-app/values.yaml
-          cat helm_deploy/multi-container-app/values.yaml
       - name: Authenticate to the cluster
         env:
-          KUBE_CERT: ${{ secrets.KUBE_CERT }}
-          KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
+          KUBE_CLUSTER: ${{ secrets.KUBE_CLUSTER }}
         run: |
-          echo "${KUBE_CERT}" > ca.crt  # <-- the quotes here are important
+          echo "${{ secrets.KUBE_CERT }}" > ca.crt
           kubectl config set-cluster ${KUBE_CLUSTER} --certificate-authority=./ca.crt --server=https://api.${KUBE_CLUSTER}
-          kubectl config set-credentials deploy-user --token=${KUBE_TOKEN}
-          kubectl config set-context ${KUBE_CLUSTER} --cluster=${KUBE_CLUSTER} --user=deploy-user --namespace=${KUBE_NAMESPACE}
+          kubectl config set-credentials deploy-user --token=${{ secrets.KUBE_TOKEN }}
+          kubectl config set-context ${KUBE_CLUSTER} --cluster=${KUBE_CLUSTER} --user=deploy-user --namespace=${{ secrets.KUBE_NAMESPACE }}
           kubectl config use-context ${KUBE_CLUSTER}
       - name: Upgrade the Helm chart
         run: |
           cd helm_deploy/multi-container-app/
           helm upgrade myapplication . \
             --values values.yaml \
-            --namespace ${KUBE_NAMESPACE}
+            --namespace ${{ secrets.KUBE_NAMESPACE }}
